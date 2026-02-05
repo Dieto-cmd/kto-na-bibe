@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "653064783691",
+    "project_id": "kto-na-bibe",
+    "storage_bucket": "kto-na-bibe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:653064783691:android:ed64c61b10093ebdd94ace",
+        "android_client_info": {
+          "package_name": "com.example.kto_na_bibe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "653064783691-pp7e9ipd7ghguhsvgblcrvca69vcldvp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPacZWjmyhsHhO5GBV7V7o7kdZhg7LLEU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "653064783691-pp7e9ipd7ghguhsvgblcrvca69vcldvp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
