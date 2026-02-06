@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kto_na_bibe/cubits/auth_cubit.dart';
 import 'package:kto_na_bibe/screens/authentication/login_page.dart';
+import 'package:kto_na_bibe/screens/authentication/verify_email_page.dart';
 import 'package:kto_na_bibe/screens/home_page.dart';
 import 'package:kto_na_bibe/screens/loading_page.dart';
 import 'package:kto_na_bibe/screens/splash_page.dart';
@@ -29,6 +30,8 @@ class _AuthenticatePageState extends State<AuthenticatePage> {
             return LoginPage(errorMessage: state.errorMessage);
           case AuthCubitStatus.authenticated:
             return HomePage();
+          case AuthCubitStatus.verificationNeeded:
+            return VerifyEmailPage(errorMessage: state.errorMessage,);
         }
       },
     );

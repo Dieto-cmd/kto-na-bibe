@@ -64,29 +64,35 @@ class _LoginPageState extends State<LoginPage> {
                   child: Center(
                     child: Column(
                       children: [
-                        TextFormField(
-                          decoration: textFormFieldDec.copyWith(
-                            hintText: "Email",
-                            hintStyle: hintTextStyle,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: TextFormField(
+                            decoration: textFormFieldDec.copyWith(
+                              hintText: "Email",
+                              hintStyle: hintTextStyle,
+                            ),
+                            style: regularTextStyle,
+                            validator: (value) =>
+                                value!.isEmpty ? "Enter an email" : null,
+                            onChanged: (value) => setState(() => email = value),
                           ),
-                          style: regularTextStyle,
-                          validator: (value) =>
-                              value!.isEmpty ? "Enter an email" : null,
-                          onChanged: (value) => setState(() => email = value),
                         ),
                         SizedBox(height: 20),
-                        TextFormField(
-                          decoration: textFormFieldDec.copyWith(
-                            hintText: "Password",
-                            hintStyle: hintTextStyle,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: TextFormField(
+                            decoration: textFormFieldDec.copyWith(
+                              hintText: "Password",
+                              hintStyle: hintTextStyle,
+                            ),
+                            style: regularTextStyle,
+                            obscureText: true,
+                            validator: (value) => value!.length < 6
+                                ? "Password must be 6+ characters long"
+                                : null,
+                            onChanged: (value) =>
+                                setState(() => password = value),
                           ),
-                          style: regularTextStyle,
-                          obscureText: true,
-                          validator: (value) => value!.length < 6
-                              ? "Password must be 6+ characters long"
-                              : null,
-                          onChanged: (value) =>
-                              setState(() => password = value),
                         ),
                       ],
                     ),
@@ -113,7 +119,43 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      backgroundColor: Colors.white,
+                    ),
+                    onPressed: () =>
+                        context.read<AuthCubit>().signInWithGoogle(),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.asset('assets/icons/Google__G__logo.svg.png', height: 24,),
+
+                          Text(
+                            "Continue with Google",
+                            style: regularTextStyle.copyWith(
+                              color: Colors.black,
+                            ),
+                          ),
+
+                          Opacity(
+                            opacity: 0.0,
+                            child: Image.asset(
+                              'assets/icons/Google__G__logo.svg.png',
+                              height: 24,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 60),
                 Text("You don't have an account?", style: regularTextStyle),
                 SizedBox(height: 20),
                 GestureDetector(

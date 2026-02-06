@@ -1,13 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kto_na_bibe/models/biba_user.dart';
 
 abstract class AuthRepository {
   Future<void> logInWithEmailAndPassword(String email, String password);
   Future<void> signUpWithEmailAndPassword(String email, String password);
+  Future<void> sendEmailVerification();
+  Future<bool> isEmailVerified();
+  Future<void> signInWithGoogle();
   Future<void> logOut();
   bool isUserLoggedIn();
   Stream<BibaUser?> get user;
 }
+
+const String _webClientID =
+    "653064783691-pp7e9ipd7ghguhsvgblcrvca69vcldvp.apps.googleusercontent.com";
 
 class FireBaseAuthRepository extends AuthRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -36,6 +43,32 @@ class FireBaseAuthRepository extends AuthRepository {
   }
 
   @override
+  Future<void> signInWithGoogle() async {
+    try {
+      GoogleSignIn.instance.initialize(
+        serverClientId:
+            "653064783691-pp7e9ipd7ghguhsvgblcrvca69vcldvp.apps.googleusercontent.com",
+      );
+      final GoogleSignInAccount? googleUser = await GoogleSignIn.instance
+          .authenticate();
+
+      if (googleUser == null) {
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      await _auth.signInWithCredential(credential);
+    } catch (e) {
+      print("Error: ${e.toString()}");
+      throw "Error trying to log in with Google";
+    }
+  }
+
+  @override
   Future<void> signUpWithEmailAndPassword(String email, String password) async {
     try {
       await _auth.createUserWithEmailAndPassword(
@@ -47,6 +80,23 @@ class FireBaseAuthRepository extends AuthRepository {
     } catch (_) {
       throw "Unknown error";
     }
+  }
+
+  @override
+  Future<void> sendEmailVerification() async {
+    final user = _auth.currentUser;
+    if (user != null || (user?.emailVerified ?? false)) {
+      await user?.sendEmailVerification();
+    }
+  }
+
+  @override
+  Future<bool> isEmailVerified() async {
+    final user = _auth.currentUser;
+    if (user == null) return false;
+
+    await user.reload();
+    return _auth.currentUser?.emailVerified == true;
   }
 
   @override

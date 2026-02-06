@@ -52,45 +52,54 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Center(
                     child: Column(
                       children: [
-                        TextFormField(
-                          decoration: textFormFieldDec.copyWith(
-                            hintText: "Email",
-                            hintStyle: hintTextStyle,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: TextFormField(
+                            decoration: textFormFieldDec.copyWith(
+                              hintText: "Email",
+                              hintStyle: hintTextStyle,
+                            ),
+                            style: regularTextStyle,
+                            validator: (value) =>
+                                value!.isEmpty ? "Enter an email" : null,
+                            onChanged: (value) => setState(() => email = value),
                           ),
-                          style: regularTextStyle,
-                          validator: (value) =>
-                              value!.isEmpty ? "Enter an email" : null,
-                          onChanged: (value) => setState(() => email = value),
                         ),
                         SizedBox(height: 20),
-                        TextFormField(
-                          decoration: textFormFieldDec.copyWith(
-                            hintText: "Password",
-                            hintStyle: hintTextStyle,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: TextFormField(
+                            decoration: textFormFieldDec.copyWith(
+                              hintText: "Password",
+                              hintStyle: hintTextStyle,
+                            ),
+                            style: regularTextStyle,
+                            obscureText: true,
+                            controller: _passwordController,
+                            validator: (value) =>
+                                value == null || value.length < 6
+                                ? "Password must be 6+ characters long"
+                                : null,
+                            onChanged: (value) =>
+                                setState(() => password = value),
                           ),
-                          style: regularTextStyle,
-                          obscureText: true,
-                          controller: _passwordController,
-                          validator: (value) =>
-                              value == null || value.length < 6
-                              ? "Password must be 6+ characters long"
-                              : null,
-                          onChanged: (value) =>
-                              setState(() => password = value),
                         ),
                         SizedBox(height: 20),
-                        TextFormField(
-                          decoration: textFormFieldDec.copyWith(
-                            hintText: "Confirm password",
-                            hintStyle: hintTextStyle,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: TextFormField(
+                            decoration: textFormFieldDec.copyWith(
+                              hintText: "Confirm password",
+                              hintStyle: hintTextStyle,
+                            ),
+                            style: regularTextStyle,
+                            obscureText: true,
+                            controller: _confirmPasswordController,
+                            validator: (value) =>
+                                value != _passwordController.text
+                                ? "Passwords and repeated password must match"
+                                : null,
                           ),
-                          style: regularTextStyle,
-                          obscureText: true,
-                          controller: _confirmPasswordController,
-                          validator: (value) =>
-                              value != _passwordController.text
-                              ? "Passwords and repeated password must match"
-                              : null,
                         ),
                       ],
                     ),
@@ -117,7 +126,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 60),
                 Text("Want to Log in?", style: regularTextStyle),
                 SizedBox(height: 20),
                 GestureDetector(
