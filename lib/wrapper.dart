@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubits/auth_cubit.dart';
 import 'screens/authentication/authenticate_page.dart';
-import 'screens/home_page.dart';
+import 'screens/app/home_page.dart';
 import 'screens/loading_page.dart';
 
 class Wrapper extends StatefulWidget {

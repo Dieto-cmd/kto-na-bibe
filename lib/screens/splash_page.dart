@@ -7,7 +7,9 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Center(child: Icon(Icons.nightlife, size: 60, color: Colors.white)),
+      body: Center(
+        child: Image.asset('assets/icons/Biba_B_logo.png', height: 240),
+      ),
     );
   }
 }
