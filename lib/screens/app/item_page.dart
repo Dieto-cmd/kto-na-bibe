@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kto_na_bibe/constants.dart';
-import 'package:kto_na_bibe/cubits/item_cubit.dart';
+import 'package:kto_na_bibe/cubits/cloud_cubit.dart';
 
 class ItemPage extends StatelessWidget {
   ItemPage({super.key});
@@ -9,7 +9,7 @@ class ItemPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ItemCubit, ItemCubitState>(
+    return BlocBuilder<CloudCubit, CloudCubitState>(
       builder: (context, state) => ListView.builder(
         itemCount: state.items?.length,
         itemBuilder: (context, index) => Padding(

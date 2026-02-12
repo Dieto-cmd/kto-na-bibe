@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kto_na_bibe/models/biba_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class CloudRepository {
   List<CircleAvatar?> getBoundUserAvatars();
   void bindUser({String? itemId, String? userUid});
   void unBindUser({String? itemId});
   List<Item>? getItems();
+  Future<void> updateUserData({String? name, String? uid});
+  Future<String?> getUserName(String? uid);
 }
 
 class CloudFirestore extends CloudRepository {
@@ -28,6 +31,26 @@ class CloudFirestore extends CloudRepository {
       Item(itemName: "Baloons", boundUserUid: "4", itemId: "1"),
     ],
   );
+
+  final String? uid;
+  CloudFirestore({this.uid});
+  FirebaseFirestore db = FirebaseFirestore.instance;
+
+  @override
+  Future<void> updateUserData({String? name, String? uid}) async {
+    final user = <String, dynamic>{"name": name};
+    try {
+      await db.collection("usersData").doc(uid).set(user);
+    } catch (e) {
+      throw "Error occured";
+    }
+  }
+  @override
+  Future<String?> getUserName(String? uid) async {
+    DocumentSnapshot doc = await db.collection("usersData").doc(uid).get();
+    return doc.get('name');
+  }
+
   @override
   List<CircleAvatar?> getBoundUserAvatars() {
     return boundUserAvatars;

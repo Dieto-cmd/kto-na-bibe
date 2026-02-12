@@ -11,6 +11,7 @@ abstract class AuthRepository {
   Future<void> logOut();
   bool isUserLoggedIn();
   Stream<BibaUser?> get user;
+  String? get userUid;
 }
 
 const String _webClientID =
@@ -24,6 +25,10 @@ class FireBaseAuthRepository extends AuthRepository {
     return _auth.authStateChanges().map(
       (User? user) => _bibaUserFromFireBaseUser(user),
     );
+  }
+
+  String? get userUid {
+    return _auth.currentUser?.uid;
   }
 
   @override

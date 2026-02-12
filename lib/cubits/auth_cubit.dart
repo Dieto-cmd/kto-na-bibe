@@ -15,10 +15,12 @@ enum AuthCubitStatus {
 class AuthCubitState {
   final AuthCubitStatus status;
   final String? errorMessage;
+  final String? uid;
 
   const AuthCubitState({
     this.status = AuthCubitStatus.initial,
     this.errorMessage,
+    this.uid
   });
 }
 
@@ -38,7 +40,7 @@ class AuthCubit extends Cubit<AuthCubitState> {
       } else {
         final isEmailVerified = await authRepository.isEmailVerified();
         if (isEmailVerified) {
-          emit(AuthCubitState(status: AuthCubitStatus.authenticated));
+          emit(AuthCubitState(status: AuthCubitStatus.authenticated, uid: authRepository.userUid));
         } else {
           emit(AuthCubitState(status: AuthCubitStatus.verificationNeeded));
         }
@@ -52,7 +54,7 @@ class AuthCubit extends Cubit<AuthCubitState> {
     if (userLoggedIn == true) {
       final isEmailVerified = await authRepository.isEmailVerified();
       if (isEmailVerified) {
-        emit(AuthCubitState(status: AuthCubitStatus.authenticated));
+        emit(AuthCubitState(status: AuthCubitStatus.authenticated, uid: authRepository.userUid));
       } else {
         emit(AuthCubitState(status: AuthCubitStatus.verificationNeeded));
       }
@@ -110,7 +112,7 @@ class AuthCubit extends Cubit<AuthCubitState> {
     emit(AuthCubitState(status: AuthCubitStatus.loading));
     final isEmailVerified = await authRepository.isEmailVerified();
     if (isEmailVerified) {
-      emit(AuthCubitState(status: AuthCubitStatus.authenticated));
+      emit(AuthCubitState(status: AuthCubitStatus.authenticated, uid: authRepository.userUid));
     } else {
       emit(
         AuthCubitState(
