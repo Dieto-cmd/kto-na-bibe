@@ -27,9 +27,16 @@ class HomePage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircleAvatar(radius: 30, backgroundColor: Colors.blue),
-                    SizedBox(height: 10),
-                    Text("Your Profile", style: regularTextStyle),
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Colors.blue,
+                      child: Icon(Icons.person, color: Colors.white, size: 50),
+                    ),
+                    SizedBox(height: 30),
+                    Text(
+                      "Dieto",
+                      style: regularTextStyle.copyWith(fontSize: 25),
+                    ),
                   ],
                 ),
               ),

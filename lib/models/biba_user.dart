@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class BibaUser {
   final String? uid;
   BibaUser({this.uid});
@@ -5,6 +7,7 @@ class BibaUser {
 
 class BibaUserData {
   final String? name;
+  final CircleAvatar? avatar;
 
-  BibaUserData({this.name});
+  BibaUserData({this.name, this.avatar});
 }

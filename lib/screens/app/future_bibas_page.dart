@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:kto_na_bibe/constants.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kto_na_bibe/cubits/auth_cubit.dart';
+import 'package:kto_na_bibe/screens/app/biba_page.dart';
 
 class FutureBibasPage extends StatelessWidget {
   const FutureBibasPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthCubit, AuthCubitState>(
-      builder: (context, state) => ListView.builder(
-        itemCount: 2,
-        itemBuilder: (context, index) => Padding(
-          padding: EdgeInsets.only(top: 20),
+    return ListView.builder(
+      itemCount: 2,
+      itemBuilder: (context, index) => Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: GestureDetector(
+          onTap: () => Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (context) => BibaPage())),
           child: Card(
             elevation: 0,
             color: Colors.amber,
