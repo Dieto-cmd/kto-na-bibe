@@ -11,52 +11,8 @@ class ItemPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserCubitState>(
       builder: (context, state) => ListView.builder(
-        itemCount: state.items?.length,
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Card(
-            color: Colors.cyan[700],
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ItemCheckBox(),
-                    Text(
-                      state.items?[index].itemName ?? "Error",
-                      style: regularTextStyle,
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    state.boundUserAvatars?[index] ??
-                        CircleAvatar(backgroundColor: Colors.grey),
-                    SizedBox(width: 10),
-                    Text(
-                      state.items?[index].boundUserUid ?? "No one yet",
-                      style: regularTextStyle,
-                    ),
-                  ],
-                ),
-                Opacity(
-                  opacity: 0,
-                  child: Row(
-                    children: [
-                      ItemCheckBox(),
-                      Text(
-                        state.items?[index].itemName ?? "Error",
-                        style: regularTextStyle,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        itemCount: 2,
+        itemBuilder: (context, index) => Placeholder(),
       ),
     );
   }

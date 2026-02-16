@@ -14,6 +14,9 @@ class FriendsPage extends StatelessWidget {
         body: ListView.builder(
           itemCount: state.friendsList?.length,
           itemBuilder: (context, index) {
+            if (state.friendsList?.length == 0) {
+              return Container();
+            }
             return Padding(
               padding: EdgeInsets.only(top: 10),
               child: Card(
@@ -23,11 +26,12 @@ class FriendsPage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: Colors.blue,
+                      backgroundColor:
+                          state.friendsDataList?[index].avatarBackgroundColor,
                       child: Icon(Icons.person, color: Colors.white),
                     ),
                     title: Text(
-                      state.friendsList?[index] ?? "Unknown",
+                      state.friendsDataList?[index].name ?? "Unknown",
                       style: regularTextStyle,
                     ),
                   ),

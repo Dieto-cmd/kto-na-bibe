@@ -19,6 +19,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Color? avatarBackgroundColor;
   String? userName;
+  bool dataIsLoaded = false;
+
+  
 
   @override
   Widget build(BuildContext context) {

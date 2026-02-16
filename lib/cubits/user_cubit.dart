@@ -1,29 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kto_na_bibe/repositories/cloud_repository.dart';
-import 'package:kto_na_bibe/models/biba_data.dart';
 import 'package:kto_na_bibe/models/biba_user.dart';
 
 class UserCubitState {
-  final List<Item>? items;
-  final List<CircleAvatar?>? boundUserAvatars;
   final String? userName;
   final Color? avatarBackgroundColor;
   final List<String>? friendsList;
+  final List<BibaUserData>? friendsDataList;
   UserCubitState({
-    this.items,
-    this.boundUserAvatars,
     this.userName,
     this.avatarBackgroundColor,
     this.friendsList,
+    this.friendsDataList,
   });
 }
 
 class UserCubit extends Cubit<UserCubitState> {
-  UserCubit({this.cloudRepository, this.uid})
-    : super(
-        UserCubitState(),
-      ) {
+  UserCubit({this.cloudRepository, this.uid}) : super(UserCubitState()) {
     getUserData();
   }
 
@@ -32,15 +26,39 @@ class UserCubit extends Cubit<UserCubitState> {
 
   Future<void> getUserData() async {
     BibaUserData? data = await cloudRepository?.getUserData(uid);
-    emit(
-      UserCubitState(
-        userName: data?.name,
-        avatarBackgroundColor: data?.avatarBackgroundColor,
-        friendsList: data?.friendsList,
-        items: cloudRepository?.getItems(),
-        boundUserAvatars: cloudRepository?.getBoundUserAvatars(),
-      ),
-    );
+    List<String>? friendsList = data?.friendsList;
+
+    List<BibaUserData>? friendsDataList = [];
+    try {
+      for (String friendUid in friendsList ?? []) {
+        final friendData = await cloudRepository?.getUserData(friendUid);
+        friendsDataList.add(
+          BibaUserData(
+            name: friendData?.name,
+            avatarBackgroundColor: friendData?.avatarBackgroundColor,
+          ),
+        );
+      }
+
+      emit(
+        UserCubitState(
+          userName: data?.name,
+          avatarBackgroundColor: data?.avatarBackgroundColor,
+          friendsList: friendsList,
+          friendsDataList: friendsDataList,
+        ),
+      );
+    } catch (e) {
+      print(e.toString);
+      emit(
+        UserCubitState(
+          userName: "Unknown",
+          avatarBackgroundColor: Colors.grey,
+          friendsList: [],
+          friendsDataList: [],
+        ),
+      );
+    }
   }
 
   Future<void> setName({String? newName, String? uid}) async {
@@ -50,10 +68,9 @@ class UserCubit extends Cubit<UserCubitState> {
       emit(
         UserCubitState(
           userName: data?.name,
-        avatarBackgroundColor: data?.avatarBackgroundColor,
-        friendsList: data?.friendsList,
-        items: cloudRepository?.getItems(),
-        boundUserAvatars: cloudRepository?.getBoundUserAvatars(),
+          avatarBackgroundColor: data?.avatarBackgroundColor,
+          friendsList: data?.friendsList,
+          friendsDataList: state.friendsDataList,
         ),
       );
     } catch (e) {
@@ -74,15 +91,13 @@ class UserCubit extends Cubit<UserCubitState> {
       emit(
         UserCubitState(
           userName: data?.name,
-        avatarBackgroundColor: data?.avatarBackgroundColor,
-        friendsList: data?.friendsList,
-        items: cloudRepository?.getItems(),
-        boundUserAvatars: cloudRepository?.getBoundUserAvatars(),
+          avatarBackgroundColor: data?.avatarBackgroundColor,
+          friendsList: data?.friendsList,
+          friendsDataList: state.friendsDataList,
         ),
       );
     } catch (e) {
       print(e.toString());
     }
   }
-
 }
