@@ -78,6 +78,10 @@ class UserCubit extends Cubit<UserCubitState> {
     }
   }
 
+  Future<void> addFriend(String? uid, String? friendUid) async {
+    await cloudRepository?.addFriend(uid: uid, friendsUid: friendUid);
+  }
+
   Future<void> setAvatarBackgroundColor({
     Color? avatarBackgroundColor,
     String? uid,

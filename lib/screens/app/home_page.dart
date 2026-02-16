@@ -20,9 +20,6 @@ class _HomePageState extends State<HomePage> {
   Color? avatarBackgroundColor;
   String? userName;
   bool dataIsLoaded = false;
-
-  
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserCubitState>(
@@ -223,7 +220,11 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             body: TabBarView(
-              children: [BibaHistoryPage(), FutureBibasPage(), FriendsPage()],
+              children: [
+                BibaHistoryPage(),
+                FutureBibasPage(),
+                FriendsPage(uid: widget.uid),
+              ],
             ),
           ),
         );

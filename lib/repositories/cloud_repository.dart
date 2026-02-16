@@ -9,6 +9,7 @@ abstract class CloudRepository {
     Color? avatarBackgroundColor,
   });
   Future<BibaUserData?> getUserData(String? uid);
+  Future<void> addFriend({String? uid, String? friendsUid});
 }
 
 class CloudFirestore extends CloudRepository {
@@ -39,6 +40,7 @@ class CloudFirestore extends CloudRepository {
     }
   }
 
+  @override
   Future<void> addFriend({String? uid, String? friendsUid}) async {
     try {
       if (uid != null) {
@@ -54,10 +56,24 @@ class CloudFirestore extends CloudRepository {
     }
   }
 
+  Future<void> initiateUserData(String? uid) async {
+    DocumentSnapshot doc = await db.collection("usersData").doc(uid).get();
+    if (doc.exists) {
+      return;
+    } else {
+      await db.collection("usersData").doc(uid).set({
+        'name': 'New User',
+        'avatarBackgroundColor': 4283215696,
+        'friendsList': [],
+      });
+    }
+  }
+
   @override
   Future<BibaUserData?> getUserData(String? uid) async {
     try {
-      DocumentSnapshot doc = await db.collection("usersData").doc(uid).get();
+      await initiateUserData(uid);
+      DocumentSnapshot? doc = await db.collection("usersData").doc(uid).get();
       return _bibaUserDataFromDocumentSnapshot(doc);
     } catch (e) {
       print(e.toString());
