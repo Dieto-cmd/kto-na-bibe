@@ -8,6 +8,7 @@ class BibaUser {
 class BibaUserData {
   final String? name;
   final Color? avatarBackgroundColor;
+  final List<String>? friendsList;
 
-  BibaUserData({this.name, this.avatarBackgroundColor});
+  BibaUserData({this.name, this.avatarBackgroundColor, this.friendsList});
 }

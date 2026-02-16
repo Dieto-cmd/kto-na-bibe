@@ -64,12 +64,28 @@ class CloudFirestore extends CloudRepository {
     }
   }
 
+  Future<void> addFriend({String? uid, String? friendsUid}) async {
+    try {
+      if (uid != null) {
+        Map<String, dynamic> data = <String, dynamic>{
+          "friendsList": friendsUid,
+        };
+        await db.collection("usersData").doc(uid).update(data);
+        data = {"friendsList": uid};
+        await db.collection("usersData").doc(friendsUid).update(data);
+      }
+    } catch (e) {
+      throw "Error occured";
+    }
+  }
+
   @override
   Future<BibaUserData?> getUserData(String? uid) async {
     try {
       DocumentSnapshot doc = await db.collection("usersData").doc(uid).get();
       return _bibaUserDataFromDocumentSnapshot(doc);
     } catch (e) {
+      print(e.toString());
       throw "Error occured";
     }
   }
@@ -105,5 +121,14 @@ class CloudFirestore extends CloudRepository {
 
 BibaUserData _bibaUserDataFromDocumentSnapshot(DocumentSnapshot doc) {
   Color color = Color(doc.get('avatarBackgroundColor'));
-  return BibaUserData(name: doc.get('name'), avatarBackgroundColor: color);
+  final friendList = doc.get('friendsList');
+  List<String>? returnList = [];
+  for (dynamic friend in friendList) {
+    returnList.add(friend.toString());
+  }
+  return BibaUserData(
+    name: doc.get('name'),
+    avatarBackgroundColor: color,
+    friendsList: returnList,
+  );
 }

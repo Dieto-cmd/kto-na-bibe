@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kto_na_bibe/cubits/cloud_cubit.dart';
+import 'package:kto_na_bibe/cubits/user_cubit.dart';
 import 'package:kto_na_bibe/repositories/cloud_repository.dart';
 import 'cubits/auth_cubit.dart';
 import 'screens/authentication/authenticate_page.dart';
@@ -20,9 +20,9 @@ class _WrapperState extends State<Wrapper> {
     return BlocBuilder<AuthCubit, AuthCubitState>(
       builder: (context, state) {
         if (state.status == AuthCubitStatus.authenticated) {
-          return BlocProvider<CloudCubit>(
+          return BlocProvider<UserCubit>(
             create: (_) =>
-                CloudCubit(cloudRepository: CloudFirestore(), uid: state.uid),
+                UserCubit(cloudRepository: CloudFirestore(), uid: state.uid),
             child: HomePage(uid: state.uid),
           );
         } else if (state.status == AuthCubitStatus.loading) {

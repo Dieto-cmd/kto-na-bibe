@@ -4,23 +4,25 @@ import 'package:kto_na_bibe/repositories/cloud_repository.dart';
 import 'package:kto_na_bibe/models/biba_data.dart';
 import 'package:kto_na_bibe/models/biba_user.dart';
 
-class CloudCubitState {
+class UserCubitState {
   final List<Item>? items;
   final List<CircleAvatar?>? boundUserAvatars;
   final String? userName;
   final Color? avatarBackgroundColor;
-  CloudCubitState({
+  final List<String>? friendsList;
+  UserCubitState({
     this.items,
     this.boundUserAvatars,
     this.userName,
     this.avatarBackgroundColor,
+    this.friendsList,
   });
 }
 
-class CloudCubit extends Cubit<CloudCubitState> {
-  CloudCubit({this.cloudRepository, this.uid})
+class UserCubit extends Cubit<UserCubitState> {
+  UserCubit({this.cloudRepository, this.uid})
     : super(
-        CloudCubitState(items: [], boundUserAvatars: null, userName: null),
+        UserCubitState(),
       ) {
     getUserData();
   }
@@ -31,9 +33,10 @@ class CloudCubit extends Cubit<CloudCubitState> {
   Future<void> getUserData() async {
     BibaUserData? data = await cloudRepository?.getUserData(uid);
     emit(
-      CloudCubitState(
+      UserCubitState(
         userName: data?.name,
         avatarBackgroundColor: data?.avatarBackgroundColor,
+        friendsList: data?.friendsList,
         items: cloudRepository?.getItems(),
         boundUserAvatars: cloudRepository?.getBoundUserAvatars(),
       ),
@@ -45,9 +48,12 @@ class CloudCubit extends Cubit<CloudCubitState> {
       await cloudRepository?.updateUserData(name: newName, uid: uid);
       BibaUserData? data = await cloudRepository?.getUserData(uid);
       emit(
-        CloudCubitState(
+        UserCubitState(
           userName: data?.name,
-          avatarBackgroundColor: data?.avatarBackgroundColor,
+        avatarBackgroundColor: data?.avatarBackgroundColor,
+        friendsList: data?.friendsList,
+        items: cloudRepository?.getItems(),
+        boundUserAvatars: cloudRepository?.getBoundUserAvatars(),
         ),
       );
     } catch (e) {
@@ -66,13 +72,17 @@ class CloudCubit extends Cubit<CloudCubitState> {
       );
       BibaUserData? data = await cloudRepository?.getUserData(uid);
       emit(
-        CloudCubitState(
+        UserCubitState(
           userName: data?.name,
-          avatarBackgroundColor: data?.avatarBackgroundColor,
+        avatarBackgroundColor: data?.avatarBackgroundColor,
+        friendsList: data?.friendsList,
+        items: cloudRepository?.getItems(),
+        boundUserAvatars: cloudRepository?.getBoundUserAvatars(),
         ),
       );
     } catch (e) {
       print(e.toString());
     }
   }
+
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kto_na_bibe/constants.dart';
-import 'package:kto_na_bibe/cubits/cloud_cubit.dart';
+import 'package:kto_na_bibe/cubits/user_cubit.dart';
 import 'package:kto_na_bibe/screens/app/guest_page.dart';
 import 'package:kto_na_bibe/screens/app/item_page.dart';
 import 'package:kto_na_bibe/repositories/cloud_repository.dart';
@@ -11,8 +11,8 @@ class BibaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<CloudCubit>(
-      create: (_) => CloudCubit(cloudRepository: CloudFirestore()),
+    return BlocProvider<UserCubit>(
+      create: (_) => UserCubit(cloudRepository: CloudFirestore()),
       child: DefaultTabController(
         length: 2,
         child: Scaffold(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kto_na_bibe/constants.dart';
 import 'package:kto_na_bibe/cubits/auth_cubit.dart';
-import 'package:kto_na_bibe/cubits/cloud_cubit.dart';
+import 'package:kto_na_bibe/cubits/user_cubit.dart';
 import 'package:kto_na_bibe/screens/app/biba_history_page.dart';
 import 'package:kto_na_bibe/screens/app/color_selector.dart';
 import 'package:kto_na_bibe/screens/app/future_bibas_page.dart';
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CloudCubit, CloudCubitState>(
+    return BlocBuilder<UserCubit, UserCubitState>(
       builder: (context, state) {
         return DefaultTabController(
           length: 3,
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       onPressed: () {
                                         context
-                                            .read<CloudCubit>()
+                                            .read<UserCubit>()
                                             .setAvatarBackgroundColor(
                                               uid: widget.uid,
                                               avatarBackgroundColor:
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(height: 30),
                         InkWell(
                           onTap: () {
-                            final cloudCubit = context.read<CloudCubit>();
+                            final userCubit = context.read<UserCubit>();
                             showDialog(
                               context: context,
                               builder: (dialogContext) {
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                                         backgroundColor: Colors.amber,
                                       ),
                                       onPressed: () async {
-                                        await cloudCubit.setName(
+                                        await userCubit.setName(
                                           newName: _controller.text,
                                           uid: widget.uid,
                                         );
