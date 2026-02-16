@@ -7,7 +7,7 @@ class BibaUser {
 
 class BibaUserData {
   final String? name;
-  final CircleAvatar? avatar;
+  final Color? avatarBackgroundColor;
 
-  BibaUserData({this.name, this.avatar});
+  BibaUserData({this.name, this.avatarBackgroundColor});
 }

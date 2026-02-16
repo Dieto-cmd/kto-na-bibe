@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:kto_na_bibe/models/biba_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kto_na_bibe/models/biba_user.dart';
 
 abstract class CloudRepository {
   List<CircleAvatar?> getBoundUserAvatars();
   void bindUser({String? itemId, String? userUid});
   void unBindUser({String? itemId});
   List<Item>? getItems();
-  Future<void> updateUserData({String? name, String? uid});
-  Future<String?> getUserName(String? uid);
+  Future<void> updateUserData({
+    String? name,
+    required String? uid,
+    Color? avatarBackgroundColor,
+  });
+  Future<BibaUserData?> getUserData(String? uid);
 }
 
 class CloudFirestore extends CloudRepository {
@@ -37,18 +42,36 @@ class CloudFirestore extends CloudRepository {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   @override
-  Future<void> updateUserData({String? name, String? uid}) async {
-    final user = <String, dynamic>{"name": name};
+  Future<void> updateUserData({
+    String? name,
+    required String? uid,
+    Color? avatarBackgroundColor,
+  }) async {
+    int? colorInt = avatarBackgroundColor?.toARGB32();
+    Map<String, dynamic> userData;
+    if (name == null && avatarBackgroundColor == null) {
+      userData = <String, dynamic>{};
+    } else if (name == null) {
+      userData = <String, dynamic>{'avatarBackgroundColor': colorInt};
+    } else {
+      userData = <String, dynamic>{'name': name};
+    }
+
     try {
-      await db.collection("usersData").doc(uid).set(user);
+      await db.collection("usersData").doc(uid).update(userData);
     } catch (e) {
       throw "Error occured";
     }
   }
+
   @override
-  Future<String?> getUserName(String? uid) async {
-    DocumentSnapshot doc = await db.collection("usersData").doc(uid).get();
-    return doc.get('name');
+  Future<BibaUserData?> getUserData(String? uid) async {
+    try {
+      DocumentSnapshot doc = await db.collection("usersData").doc(uid).get();
+      return _bibaUserDataFromDocumentSnapshot(doc);
+    } catch (e) {
+      throw "Error occured";
+    }
   }
 
   @override
@@ -78,4 +101,9 @@ class CloudFirestore extends CloudRepository {
       }
     }
   }
+}
+
+BibaUserData _bibaUserDataFromDocumentSnapshot(DocumentSnapshot doc) {
+  Color color = Color(doc.get('avatarBackgroundColor'));
+  return BibaUserData(name: doc.get('name'), avatarBackgroundColor: color);
 }
