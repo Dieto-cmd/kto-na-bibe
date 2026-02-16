@@ -22,11 +22,23 @@ class CloudCubit extends Cubit<CloudCubitState> {
     : super(
         CloudCubitState(items: [], boundUserAvatars: null, userName: null),
       ) {
-    getItems();
+    getUserData();
   }
 
   final CloudRepository? cloudRepository;
   final String? uid;
+
+  Future<void> getUserData() async {
+    BibaUserData? data = await cloudRepository?.getUserData(uid);
+    emit(
+      CloudCubitState(
+        userName: data?.name,
+        avatarBackgroundColor: data?.avatarBackgroundColor,
+        items: cloudRepository?.getItems(),
+        boundUserAvatars: cloudRepository?.getBoundUserAvatars(),
+      ),
+    );
+  }
 
   Future<void> setName({String? newName, String? uid}) async {
     try {
@@ -62,22 +74,5 @@ class CloudCubit extends Cubit<CloudCubitState> {
     } catch (e) {
       print(e.toString());
     }
-  }
-
-  Future<Color?> getAvatarBackgroundColor(String? uid) async {
-    BibaUserData? data = await cloudRepository?.getUserData(uid);
-    Color? color = await data?.avatarBackgroundColor;
-    return color;
-  }
-
-  void getItems() async {
-    //simulating getting itemCount from repository
-    await Future.delayed(Duration(milliseconds: 500));
-    emit(
-      CloudCubitState(
-        items: cloudRepository?.getItems(),
-        boundUserAvatars: cloudRepository?.getBoundUserAvatars(),
-      ),
-    );
   }
 }

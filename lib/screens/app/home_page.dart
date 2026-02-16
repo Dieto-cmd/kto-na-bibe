@@ -6,6 +6,7 @@ import 'package:kto_na_bibe/cubits/cloud_cubit.dart';
 import 'package:kto_na_bibe/screens/app/biba_history_page.dart';
 import 'package:kto_na_bibe/screens/app/color_selector.dart';
 import 'package:kto_na_bibe/screens/app/future_bibas_page.dart';
+import 'package:kto_na_bibe/screens/app/friends_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key, this.uid});
@@ -17,13 +18,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Color? avatarBackgroundColor;
+  String? userName;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CloudCubit, CloudCubitState>(
       builder: (context, state) {
         return DefaultTabController(
-          length: 2,
+          length: 3,
           child: Scaffold(
             backgroundColor: Colors.black,
             endDrawer: Drawer(
@@ -92,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                           },
                           child: CircleAvatar(
                             radius: 40,
-                            backgroundColor: avatarBackgroundColor,
+                            backgroundColor: state.avatarBackgroundColor,
                             child: Icon(
                               Icons.person,
                               color: Colors.white,
@@ -191,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                           backgroundColor: Colors.amber,
                           child: CircleAvatar(
                             radius: 15,
-                            backgroundColor: avatarBackgroundColor,
+                            backgroundColor: state.avatarBackgroundColor,
                             child: Icon(
                               Icons.person,
                               color: Colors.white,
@@ -213,10 +215,13 @@ class _HomePageState extends State<HomePage> {
                 tabs: [
                   Tab(text: "Biba History"),
                   Tab(text: "Future Bibas"),
+                  Tab(text: "Freinds"),
                 ],
               ),
             ),
-            body: TabBarView(children: [BibaHistoryPage(), FutureBibasPage()]),
+            body: TabBarView(
+              children: [BibaHistoryPage(), FutureBibasPage(), FriendsPage()],
+            ),
           ),
         );
       },

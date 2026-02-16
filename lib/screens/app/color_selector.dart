@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kto_na_bibe/constants.dart';
 
 class ColorSelector extends StatefulWidget {
   final Color? initialColor;
