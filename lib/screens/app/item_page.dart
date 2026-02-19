@@ -5,13 +5,12 @@ import 'package:kto_na_bibe/cubits/user_cubit.dart';
 
 class ItemPage extends StatelessWidget {
   ItemPage({super.key});
-  final items = ['Speaker', 'Cookies', 'Cola'];
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserCubitState>(
       builder: (context, state) => ListView.builder(
-        itemCount: 2,
+        itemCount: 1,
         itemBuilder: (context, index) => Placeholder(),
       ),
     );

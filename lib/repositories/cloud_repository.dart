@@ -43,15 +43,25 @@ class CloudFirestore extends CloudRepository {
   @override
   Future<void> addFriend({String? uid, String? friendsUid}) async {
     try {
+      DocumentSnapshot friend = await db
+          .collection("usersData")
+          .doc(friendsUid)
+          .get();
+
+      if (friend.exists == false) {
+        throw "Couldn't find matching uid";
+      }
+
       if (uid != null) {
         Map<String, dynamic> data = <String, dynamic>{
-          "friendsList": friendsUid,
+          "friendsList": [friendsUid],
         };
         await db.collection("usersData").doc(uid).update(data);
-        data = {"friendsList": uid};
+        data = {"friendsList": [uid]};
         await db.collection("usersData").doc(friendsUid).update(data);
       }
     } catch (e) {
+      print(e.toString());
       throw "Error occured";
     }
   }

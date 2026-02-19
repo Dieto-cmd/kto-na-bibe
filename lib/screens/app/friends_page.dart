@@ -76,8 +76,34 @@ class FriendsPage extends StatelessWidget {
                         backgroundColor: Colors.amber,
                       ),
                       onPressed: () async {
-                        await userCubit.addFriend(uid, _controller.text);
-                        Navigator.pop(context);
+                        try {
+                          await userCubit.addFriend(uid, _controller.text);
+                          Navigator.pop(context);
+                        } catch (e) {
+                          showDialog(
+                            context: context,
+                            builder: (dialogContext) {
+                              return AlertDialog(
+                                backgroundColor: Colors.black,
+                                title: Text(
+                                  "Uid doesn't exist",
+                                  style: regularTextStyle,
+                                ),
+                                actions: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.amber,
+                                    ),
+                                    child: Text("Ok", style: regularTextStyle),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
                       },
                       child: Text("Add", style: regularTextStyle),
                     ),

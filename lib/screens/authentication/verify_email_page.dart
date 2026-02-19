@@ -13,7 +13,6 @@ class VerifyEmailPage extends StatefulWidget {
 }
 
 class _VerifyEmailPageState extends State<VerifyEmailPage> {
-
   @override
   void initState() {
     super.initState();
@@ -40,6 +39,7 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
       builder: (context, state) => Scaffold(
         appBar: AppBar(
           title: Text("Kto na bibe", style: regularTextStyle),
+          centerTitle: true,
           backgroundColor: Colors.pink[700],
         ),
         backgroundColor: Colors.black,
@@ -69,8 +69,20 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
               ),
               SizedBox(height: 20),
               GestureDetector(
-                onTap: () =>
-                    context.read<AuthCubit>().resendEmailVerification(),
+                onTap: () {
+                  context.read<AuthCubit>().resendEmailVerification();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "Verification email has been resent",
+                        style: regularTextStyle,
+                      ),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                },
+
                 child: Text(
                   "Resend verification email",
                   style: regularTextStyle.copyWith(

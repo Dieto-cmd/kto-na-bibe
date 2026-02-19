@@ -25,11 +25,11 @@ class UserCubit extends Cubit<UserCubitState> {
   final String? uid;
 
   Future<void> getUserData() async {
-    BibaUserData? data = await cloudRepository?.getUserData(uid);
-    List<String>? friendsList = data?.friendsList;
-
-    List<BibaUserData>? friendsDataList = [];
     try {
+      BibaUserData? data = await cloudRepository?.getUserData(uid);
+      List<String>? friendsList = data?.friendsList;
+
+      List<BibaUserData>? friendsDataList = [];
       for (String friendUid in friendsList ?? []) {
         final friendData = await cloudRepository?.getUserData(friendUid);
         friendsDataList.add(
@@ -79,7 +79,11 @@ class UserCubit extends Cubit<UserCubitState> {
   }
 
   Future<void> addFriend(String? uid, String? friendUid) async {
-    await cloudRepository?.addFriend(uid: uid, friendsUid: friendUid);
+    try {
+      await cloudRepository?.addFriend(uid: uid, friendsUid: friendUid);
+    } catch (e) {
+      throw "Error occured";
+    }
   }
 
   Future<void> setAvatarBackgroundColor({

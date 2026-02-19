@@ -7,6 +7,7 @@ import 'package:kto_na_bibe/screens/app/biba_history_page.dart';
 import 'package:kto_na_bibe/screens/app/color_selector.dart';
 import 'package:kto_na_bibe/screens/app/future_bibas_page.dart';
 import 'package:kto_na_bibe/screens/app/friends_page.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key, this.uid});
@@ -156,9 +157,59 @@ class _HomePageState extends State<HomePage> {
                               },
                             );
                           },
-                          child: Text(
-                            state.userName ?? "Undefined",
-                            style: regularTextStyle.copyWith(fontSize: 25),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                state.userName ?? "Undefined",
+                                style: regularTextStyle.copyWith(fontSize: 25),
+                              ),
+                              SizedBox(height: 10),
+                              GestureDetector(
+                                onTap: () async {
+                                  await Clipboard.setData(
+                                    ClipboardData(text: widget.uid ?? ""),
+                                  );
+
+                                  if (context.mounted) {
+                                    Navigator.of(context).pop();
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "Uid copied to clipboard",
+                                          style: regularTextStyle,
+                                        ),
+                                        duration: Duration(seconds: 2),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "uid: ${widget.uid ?? "Undefined"}",
+                                        style: regularTextStyle.copyWith(
+                                          fontSize: 11,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      const Icon(
+                                        Icons.copy,
+                                        size: 20,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
