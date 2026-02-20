@@ -1,0 +1,5 @@
+
+* linguist-detectable=false
+
+
+lib/** linguist-detectable=true
