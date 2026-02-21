@@ -18,13 +18,13 @@ class UserCubitState {
 
 class UserCubit extends Cubit<UserCubitState> {
   UserCubit({this.cloudRepository, this.uid}) : super(UserCubitState()) {
-    getUserData();
+    getUserData(uid);
   }
 
   final CloudRepository? cloudRepository;
   final String? uid;
 
-  Future<void> getUserData() async {
+  Future<void> getUserData(String? uid) async {
     try {
       BibaUserData? data = await cloudRepository?.getUserData(uid);
       List<String>? friendsList = data?.friendsList;
@@ -132,6 +132,22 @@ class UserCubit extends Cubit<UserCubitState> {
       );
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future<void> createBiba({
+    String? name,
+    String? place,
+    String? hostUid,
+  }) async {
+    try {
+      await cloudRepository?.createBiba(
+        name: name,
+        place: place,
+        hostUid: hostUid,
+      );
+    } catch (e) {
+      throw "Error occured";
     }
   }
 }

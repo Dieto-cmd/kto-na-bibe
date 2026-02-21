@@ -11,6 +11,7 @@ abstract class CloudRepository {
   Future<BibaUserData?> getUserData(String? uid);
   Future<void> addFriend({String? uid, String? friendsUid});
   Future<void> deleteFriend({String? uid, String? friendsUid});
+  Future<void> createBiba({String? name, String? hostUid, String? place});
 }
 
 class CloudFirestore extends CloudRepository {
@@ -58,7 +59,9 @@ class CloudFirestore extends CloudRepository {
           "friendsList": [friendsUid],
         };
         await db.collection("usersData").doc(uid).update(data);
-        data = {"friendsList": [uid]};
+        data = {
+          "friendsList": [uid],
+        };
         await db.collection("usersData").doc(friendsUid).update(data);
       }
     } catch (e) {
@@ -84,7 +87,9 @@ class CloudFirestore extends CloudRepository {
           "friendsList": FieldValue.arrayRemove([friendsUid]),
         };
         await db.collection("usersData").doc(uid).update(data);
-        data = {"friendsList": FieldValue.arrayRemove([uid])};
+        data = {
+          "friendsList": FieldValue.arrayRemove([uid]),
+        };
         await db.collection("usersData").doc(friendsUid).update(data);
       }
     } catch (e) {
@@ -103,6 +108,25 @@ class CloudFirestore extends CloudRepository {
         'avatarBackgroundColor': 4283215696,
         'friendsList': [],
       });
+    }
+  }
+
+  @override
+  Future<void> createBiba({
+    String? name,
+    String? hostUid,
+    String? place,
+  }) async {
+    try {
+      await db.collection("Bibas").doc().set({
+        'name': name,
+        'hostUid': hostUid,
+        'place': place,
+        'guestUids': [],
+      });
+    } catch (e) {
+      print(e.toString());
+      throw "Error occured";
     }
   }
 

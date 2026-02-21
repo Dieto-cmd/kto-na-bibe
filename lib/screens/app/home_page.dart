@@ -273,7 +273,7 @@ class _HomePageState extends State<HomePage> {
             body: TabBarView(
               children: [
                 BibaHistoryPage(),
-                FutureBibasPage(),
+                FutureBibasPage(uid: widget.uid),
                 FriendsPage(uid: widget.uid),
               ],
             ),

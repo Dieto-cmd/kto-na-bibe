@@ -90,7 +90,7 @@ class FriendsPage extends StatelessWidget {
                 },
               ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.amber,
+          backgroundColor: Colors.pink[700],
           onPressed: () {
             final userCubit = context.read<UserCubit>();
             showDialog(
