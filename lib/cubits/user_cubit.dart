@@ -81,6 +81,32 @@ class UserCubit extends Cubit<UserCubitState> {
   Future<void> addFriend(String? uid, String? friendUid) async {
     try {
       await cloudRepository?.addFriend(uid: uid, friendsUid: friendUid);
+      BibaUserData? data = await cloudRepository?.getUserData(uid);
+      emit(
+        UserCubitState(
+          userName: data?.name,
+          avatarBackgroundColor: data?.avatarBackgroundColor,
+          friendsList: data?.friendsList,
+          friendsDataList: state.friendsDataList,
+        ),
+      );
+    } catch (e) {
+      throw "Error occured";
+    }
+  }
+
+  Future<void> deleteFriend(String? uid, String? friendUid) async {
+    try {
+      await cloudRepository?.deleteFriend(uid: uid, friendsUid: friendUid);
+      BibaUserData? data = await cloudRepository?.getUserData(uid);
+      emit(
+        UserCubitState(
+          userName: data?.name,
+          avatarBackgroundColor: data?.avatarBackgroundColor,
+          friendsList: data?.friendsList,
+          friendsDataList: state.friendsDataList,
+        ),
+      );
     } catch (e) {
       throw "Error occured";
     }

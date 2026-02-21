@@ -24,21 +24,64 @@ class FriendsPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.only(top: 10),
-                    child: Card(
-                      elevation: 0,
-                      color: Colors.amber,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: state
-                                .friendsDataList?[index]
-                                .avatarBackgroundColor,
-                            child: Icon(Icons.person, color: Colors.white),
-                          ),
-                          title: Text(
-                            state.friendsDataList?[index].name ?? "Unknown",
-                            style: regularTextStyle,
+                    child: GestureDetector(
+                      onTap: () {
+                        final userCubit = context.read<UserCubit>();
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) {
+                            return AlertDialog(
+                              backgroundColor: Colors.black,
+                              title: Text(
+                                "Delete ${state.friendsDataList?[index].name} from friends",
+                                style: regularTextStyle,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(
+                                    "Cancel",
+                                    style: regularTextStyle,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    userCubit.deleteFriend(
+                                      uid,
+                                      state.friendsList?[index],
+                                    );
+                                    Navigator.pop(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
+                                  child: Text(
+                                    "Delete",
+                                    style: regularTextStyle,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Card(
+                        elevation: 0,
+                        color: Colors.amber,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: state
+                                  .friendsDataList?[index]
+                                  .avatarBackgroundColor,
+                              child: Icon(Icons.person, color: Colors.white),
+                            ),
+                            title: Text(
+                              state.friendsDataList?[index].name ?? "Unknown",
+                              style: regularTextStyle,
+                            ),
                           ),
                         ),
                       ),

@@ -10,6 +10,7 @@ abstract class CloudRepository {
   });
   Future<BibaUserData?> getUserData(String? uid);
   Future<void> addFriend({String? uid, String? friendsUid});
+  Future<void> deleteFriend({String? uid, String? friendsUid});
 }
 
 class CloudFirestore extends CloudRepository {
@@ -58,6 +59,32 @@ class CloudFirestore extends CloudRepository {
         };
         await db.collection("usersData").doc(uid).update(data);
         data = {"friendsList": [uid]};
+        await db.collection("usersData").doc(friendsUid).update(data);
+      }
+    } catch (e) {
+      print(e.toString());
+      throw "Error occured";
+    }
+  }
+
+  @override
+  Future<void> deleteFriend({String? uid, String? friendsUid}) async {
+    try {
+      DocumentSnapshot friend = await db
+          .collection("usersData")
+          .doc(friendsUid)
+          .get();
+
+      if (friend.exists == false) {
+        throw "Couldn't find matching uid";
+      }
+
+      if (uid != null) {
+        Map<String, dynamic> data = <String, dynamic>{
+          "friendsList": FieldValue.arrayRemove([friendsUid]),
+        };
+        await db.collection("usersData").doc(uid).update(data);
+        data = {"friendsList": FieldValue.arrayRemove([uid])};
         await db.collection("usersData").doc(friendsUid).update(data);
       }
     } catch (e) {
