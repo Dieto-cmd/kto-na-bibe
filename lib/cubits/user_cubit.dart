@@ -164,6 +164,18 @@ class UserCubit extends Cubit<UserCubitState> {
         place: place,
         hostUid: hostUid,
       );
+      List<BibaData>? futureBibas = await cloudRepository?.getUserFutureBibas(
+        uid: uid,
+      );
+      emit(
+        UserCubitState(
+          userName: state.userName,
+          avatarBackgroundColor: state.avatarBackgroundColor,
+          friendsList: state.friendsList,
+          friendsDataList: state.friendsDataList,
+          futureBibaList: futureBibas,
+        ),
+      );
     } catch (e) {
       throw "Error occured";
     }
