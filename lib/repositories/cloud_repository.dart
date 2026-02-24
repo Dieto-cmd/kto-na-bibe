@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kto_na_bibe/models/biba_data.dart';
 import 'package:kto_na_bibe/models/biba_user.dart';
 
 abstract class CloudRepository {
@@ -12,6 +13,7 @@ abstract class CloudRepository {
   Future<void> addFriend({String? uid, String? friendsUid});
   Future<void> deleteFriend({String? uid, String? friendsUid});
   Future<void> createBiba({String? name, String? hostUid, String? place});
+  Future<List<BibaData>> getUserFutureBibas({String? uid});
 }
 
 class CloudFirestore extends CloudRepository {
@@ -127,6 +129,48 @@ class CloudFirestore extends CloudRepository {
     } catch (e) {
       print(e.toString());
       throw "Error occured";
+    }
+  }
+
+  @override
+  Future<List<BibaData>> getUserFutureBibas({String? uid}) async {
+    List<BibaData> bibaList = [];
+    final snapshot = await db
+        .collection("Bibas")
+        .where(
+          Filter.or(
+            Filter('hostUid', isEqualTo: uid),
+            Filter('guestUids', arrayContains: uid),
+          ),
+        )
+        .get();
+    for (final doc in snapshot.docs) {
+      final biba = doc.data();
+      List<String?> guestNames = [];
+      for (final guestUid in biba["guestUids"]){
+        guestNames.add(await getUserName(uid: guestUid));
+      }
+
+      bibaList.add(
+        BibaData(
+          hostId: biba["hostUid"] ,
+          hostName: await getUserName(uid: biba["hostUid"]),
+          guestsIds: List<String>.from(biba["guestUids"] ?? []),
+          guestNames: guestNames,
+          name: biba["name"],
+          place: biba["place"] ,
+        ),
+      );
+    }
+    return bibaList;
+  }
+
+  Future<String?> getUserName({String? uid}) async {
+    try {
+      BibaUserData? data = await getUserData(uid);
+      return data?.name;
+    } catch (e) {
+      return e.toString();
     }
   }
 
