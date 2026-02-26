@@ -10,12 +10,14 @@ class UserCubitState {
   final List<String>? friendsList;
   final List<BibaUserData>? friendsDataList;
   final List<BibaData>? futureBibaList;
+  final List<BibaData>? pastBibaList;
   UserCubitState({
     this.userName,
     this.avatarBackgroundColor,
     this.friendsList,
     this.friendsDataList,
     this.futureBibaList,
+    this.pastBibaList,
   });
 }
 
@@ -23,6 +25,7 @@ class UserCubit extends Cubit<UserCubitState> {
   UserCubit({this.cloudRepository, this.uid}) : super(UserCubitState()) {
     getUserData(uid);
     getUserFutureBibas();
+    getUserPastBibas();
   }
 
   final CloudRepository? cloudRepository;
@@ -60,6 +63,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsList: friendsList,
           friendsDataList: friendsDataList,
           futureBibaList: state.futureBibaList,
+          pastBibaList: state.pastBibaList,
         ),
       );
     } catch (e) {
@@ -86,6 +90,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsList: data?.friendsList,
           friendsDataList: state.friendsDataList,
           futureBibaList: state.futureBibaList,
+          pastBibaList: state.pastBibaList,
         ),
       );
     } catch (e) {
@@ -104,6 +109,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsList: data?.friendsList,
           friendsDataList: state.friendsDataList,
           futureBibaList: state.futureBibaList,
+          pastBibaList: state.pastBibaList,
         ),
       );
     } catch (e) {
@@ -122,6 +128,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsList: data?.friendsList,
           friendsDataList: state.friendsDataList,
           futureBibaList: state.futureBibaList,
+          pastBibaList: state.pastBibaList,
         ),
       );
     } catch (e) {
@@ -146,6 +153,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsList: data?.friendsList,
           friendsDataList: state.friendsDataList,
           futureBibaList: state.futureBibaList,
+          pastBibaList: state.pastBibaList,
         ),
       );
     } catch (e) {
@@ -174,6 +182,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsList: state.friendsList,
           friendsDataList: state.friendsDataList,
           futureBibaList: futureBibas,
+          pastBibaList: state.pastBibaList,
         ),
       );
     } catch (e) {
@@ -192,6 +201,23 @@ class UserCubit extends Cubit<UserCubitState> {
         friendsList: state.friendsList,
         friendsDataList: state.friendsDataList,
         futureBibaList: futureBibas,
+        pastBibaList: state.pastBibaList,
+      ),
+    );
+  }
+
+  Future<void> getUserPastBibas() async {
+    List<BibaData>? pastBibas = await cloudRepository?.getUserPastBibas(
+      uid: uid,
+    );
+    emit(
+      UserCubitState(
+        userName: state.userName,
+        avatarBackgroundColor: state.avatarBackgroundColor,
+        friendsList: state.friendsList,
+        friendsDataList: state.friendsDataList,
+        futureBibaList: state.futureBibaList,
+        pastBibaList: pastBibas,
       ),
     );
   }

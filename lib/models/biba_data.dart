@@ -5,6 +5,15 @@ class BibaData {
   List<String?>? guestNames;
   String? name;
   String? place;
+  String? bibaId;
 
-  BibaData({this.guestsIds, this.hostId, this.name, this.place, this.guestNames, this.hostName});
+  BibaData({
+    this.guestsIds,
+    this.hostId,
+    this.name,
+    this.place,
+    this.guestNames,
+    this.hostName,
+    this.bibaId,
+  });
 }

@@ -14,6 +14,9 @@ abstract class CloudRepository {
   Future<void> deleteFriend({String? uid, String? friendsUid});
   Future<void> createBiba({String? name, String? hostUid, String? place});
   Future<List<BibaData>> getUserFutureBibas({String? uid});
+  Future<List<BibaData>> getUserPastBibas({String? uid});
+  Future<BibaData> getBibaData({String? bibaId});
+  Future<void> addFriendToBiba({String? bibaID, String? friendUid});
 }
 
 class CloudFirestore extends CloudRepository {
@@ -132,6 +135,16 @@ class CloudFirestore extends CloudRepository {
     }
   }
 
+  Future<void> deleteNewUsersData() async {
+    final snapshot = await db
+        .collection("usersData")
+        .where(Filter("name", isEqualTo: "New User"))
+        .get();
+    for (final doc in snapshot.docs) {
+      await db.collection("usersData").doc(doc.id).delete();
+    }
+  }
+
   @override
   Future<List<BibaData>> getUserFutureBibas({String? uid}) async {
     List<BibaData> bibaList = [];
@@ -147,22 +160,97 @@ class CloudFirestore extends CloudRepository {
     for (final doc in snapshot.docs) {
       final biba = doc.data();
       List<String?> guestNames = [];
-      for (final guestUid in biba["guestUids"]){
+      for (final guestUid in biba["guestUids"]) {
         guestNames.add(await getUserName(uid: guestUid));
       }
 
       bibaList.add(
         BibaData(
-          hostId: biba["hostUid"] ,
+          hostId: biba["hostUid"],
           hostName: await getUserName(uid: biba["hostUid"]),
           guestsIds: List<String>.from(biba["guestUids"] ?? []),
           guestNames: guestNames,
           name: biba["name"],
-          place: biba["place"] ,
+          place: biba["place"],
+          bibaId: doc.id,
         ),
       );
     }
     return bibaList;
+  }
+
+  @override
+  Future<List<BibaData>> getUserPastBibas({String? uid}) async {
+    List<BibaData> bibaList = [];
+    final snapshot = await db
+        .collection("Bibas")
+        .where(
+          Filter.or(
+            Filter('hostUid', isEqualTo: uid),
+            Filter('guestUids', arrayContains: uid),
+          ),
+        )
+        .get();
+    for (final doc in snapshot.docs) {
+      final biba = doc.data();
+      List<String?> guestNames = [];
+      for (final guestUid in biba["guestUids"]) {
+        guestNames.add(await getUserName(uid: guestUid));
+      }
+
+      bibaList.add(
+        BibaData(
+          hostId: biba["hostUid"],
+          hostName: await getUserName(uid: biba["hostUid"]),
+          guestsIds: List<String>.from(biba["guestUids"] ?? []),
+          guestNames: guestNames,
+          name: biba["name"],
+          place: biba["place"],
+          bibaId: doc.id,
+        ),
+      );
+    }
+    return bibaList;
+  }
+
+  @override
+  Future<BibaData> getBibaData({String? bibaId}) async {
+    try {
+      DocumentSnapshot doc = await db.collection("Bibas").doc(bibaId).get();
+
+      final friendUidList = List<String>.from(doc.get('guestUids') ?? []);
+      List<String?> friendNameList = [];
+
+      for (String uid in friendUidList) {
+        friendNameList.add(await getUserName(uid: uid));
+      }
+
+      final hostName = await getUserName(uid: doc.get('hostUid'));
+
+      return BibaData(
+        name: doc.get('name'),
+        hostId: doc.get('hostUid'),
+        hostName: hostName,
+        bibaId: doc.id,
+        guestsIds: friendUidList,
+        guestNames: friendNameList,
+        place: doc.get('place'),
+      );
+    } catch (e) {
+      print("Printing exception thrown in getBibaData: ${e.toString()}");
+      return BibaData();
+    }
+  }
+
+  @override
+  Future<void> addFriendToBiba({String? bibaID, String? friendUid}) async {
+    try {
+      await db.collection("Bibas").doc(bibaID).update({
+        'guestUids' : FieldValue.arrayUnion([friendUid])
+      });
+    } catch (e) {
+      print("Printing exception thrown in addFriendToBiba: ${e.toString()}");
+    }
   }
 
   Future<String?> getUserName({String? uid}) async {
