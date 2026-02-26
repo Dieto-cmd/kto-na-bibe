@@ -14,36 +14,43 @@ class BibaPage extends StatelessWidget {
     return BlocBuilder<UserCubit, UserCubitState>(
       builder: (userContext, userState) {
         return BlocBuilder<BibaCubit, BibaCubitState>(
-          builder: (context, state) => DefaultTabController(
-            length: 2,
-            child: Scaffold(
-              backgroundColor: Colors.black,
-              appBar: AppBar(
-                backgroundColor: Colors.pink[700],
-                title: Text(
-                  state.data?.name ?? "Unknown",
-                  style: regularTextStyle,
+          builder: (context, state) {
+            // Generally it's ill-advised to store variables inside a cubit
+            //rather than a cubit state, but the situation where uid needs to be
+            //read from UserCubit is very rare
+            bool isHost =
+                state.data?.hostId == userContext.read<UserCubit>().uid; 
+            return DefaultTabController(
+              length: 2,
+              child: Scaffold(
+                backgroundColor: Colors.black,
+                appBar: AppBar(
+                  backgroundColor: Colors.pink[700],
+                  title: Text(
+                    state.data?.name ?? "Unknown",
+                    style: regularTextStyle,
+                  ),
+                  centerTitle: true,
+                  leading: GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Icon(Icons.arrow_back, color: Colors.white),
+                  ),
+                  bottom: TabBar(
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorColor: Colors.amber,
+                    indicatorWeight: 1.0,
+                    unselectedLabelColor: Colors.grey,
+                    labelStyle: regularTextStyle.copyWith(fontSize: 16),
+                    tabs: [
+                      Tab(text: "Guests"),
+                      Tab(text: "Items"),
+                    ],
+                  ),
                 ),
-                centerTitle: true,
-                leading: GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: Icon(Icons.arrow_back, color: Colors.white),
-                ),
-                bottom: TabBar(
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicatorColor: Colors.amber,
-                  indicatorWeight: 1.0,
-                  unselectedLabelColor: Colors.grey,
-                  labelStyle: regularTextStyle.copyWith(fontSize: 16),
-                  tabs: [
-                    Tab(text: "Guests"),
-                    Tab(text: "Items"),
-                  ],
-                ),
+                body: TabBarView(children: [GuestPage(isHost: isHost,), ItemPage()]),
               ),
-              body: TabBarView(children: [GuestPage(), ItemPage()]),
-            ),
-          ),
+            );
+          },
         );
       },
     );

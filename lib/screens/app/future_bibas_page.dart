@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kto_na_bibe/constants.dart';
 import 'package:kto_na_bibe/cubits/user_cubit.dart';
 import 'package:kto_na_bibe/screens/app/biba_page.dart';
+import 'package:kto_na_bibe/repositories/cloud_repository.dart';
+import 'package:kto_na_bibe/cubits/biba_cubit.dart';
 
 class FutureBibasPage extends StatelessWidget {
   const FutureBibasPage({super.key, this.uid});
@@ -19,9 +21,27 @@ class FutureBibasPage extends StatelessWidget {
             itemBuilder: (context, index) => Padding(
               padding: EdgeInsets.only(top: 20),
               child: GestureDetector(
-                onTap: () => Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (context) => BibaPage())),
+                onTap: () {
+                  final userCubit = context.read<UserCubit>();
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider.value(value: userCubit),
+
+                          BlocProvider<BibaCubit>(
+                            create: (context) => BibaCubit(
+                              cloudRepository: CloudFirestore(),
+                              bibaId: state.pastBibaList?[index].bibaId,
+                            ),
+                          ),
+                        ],
+
+                        child: BibaPage(),
+                      ),
+                    ),
+                  );
+                },
                 child: Card(
                   elevation: 0,
                   color: Colors.amber,
