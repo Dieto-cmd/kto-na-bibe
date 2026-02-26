@@ -54,9 +54,9 @@ class BibaHistoryPage extends StatelessWidget {
                     style: regularTextStyle,
                   ),
                   subtitle: Text(
-                    "Date: 21/02/2025, "
-                    "Host: ${state.pastBibaList?[index].hostName},"
-                    "Place: ${state.pastBibaList?[index].place}, "
+                    "Date: 21/02/2025, \n"
+                    "Host: ${state.pastBibaList?[index].hostName},\n"
+                    "Place: ${state.pastBibaList?[index].place},\n"
                     "Guests: ${state.pastBibaList?[index].guestsIds?.length}",
                     style: hintTextStyle.copyWith(
                       color: Colors.grey,

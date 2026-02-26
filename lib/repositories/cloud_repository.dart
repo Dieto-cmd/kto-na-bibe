@@ -135,16 +135,6 @@ class CloudFirestore extends CloudRepository {
     }
   }
 
-  Future<void> deleteNewUsersData() async {
-    final snapshot = await db
-        .collection("usersData")
-        .where(Filter("name", isEqualTo: "New User"))
-        .get();
-    for (final doc in snapshot.docs) {
-      await db.collection("usersData").doc(doc.id).delete();
-    }
-  }
-
   @override
   Future<List<BibaData>> getUserFutureBibas({String? uid}) async {
     List<BibaData> bibaList = [];
@@ -220,20 +210,28 @@ class CloudFirestore extends CloudRepository {
 
       final friendUidList = List<String>.from(doc.get('guestUids') ?? []);
       List<String?> friendNameList = [];
+      List<Color?> friendBackgroundColorList = [];
 
       for (String uid in friendUidList) {
         friendNameList.add(await getUserName(uid: uid));
+        BibaUserData? userData = await getUserData(uid);
+        friendBackgroundColorList.add(userData?.avatarBackgroundColor);
       }
 
-      final hostName = await getUserName(uid: doc.get('hostUid'));
+      BibaUserData? hostData = await getUserData(doc.get('hostUid'));
+
+      final hostName = hostData?.name;
+      final hostBackgroundColor = hostData?.avatarBackgroundColor;
 
       return BibaData(
         name: doc.get('name'),
         hostId: doc.get('hostUid'),
         hostName: hostName,
+        hostBackgroundColor: hostBackgroundColor ,
         bibaId: doc.id,
         guestsIds: friendUidList,
         guestNames: friendNameList,
+        guestsBackgroundColors: friendBackgroundColorList,
         place: doc.get('place'),
       );
     } catch (e) {
@@ -246,7 +244,7 @@ class CloudFirestore extends CloudRepository {
   Future<void> addFriendToBiba({String? bibaID, String? friendUid}) async {
     try {
       await db.collection("Bibas").doc(bibaID).update({
-        'guestUids' : FieldValue.arrayUnion([friendUid])
+        'guestUids': FieldValue.arrayUnion([friendUid]),
       });
     } catch (e) {
       print("Printing exception thrown in addFriendToBiba: ${e.toString()}");
