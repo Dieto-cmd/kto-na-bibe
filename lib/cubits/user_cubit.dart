@@ -4,6 +4,8 @@ import 'package:kto_na_bibe/models/biba_data.dart';
 import 'package:kto_na_bibe/repositories/cloud_repository.dart';
 import 'package:kto_na_bibe/models/biba_user.dart';
 
+enum UserCubitStatus { dataLoading, dataLoaded }
+
 class UserCubitState {
   final String? userName;
   final Color? avatarBackgroundColor;
@@ -11,6 +13,7 @@ class UserCubitState {
   final List<BibaUserData>? friendsDataList;
   final List<BibaData>? futureBibaList;
   final List<BibaData>? pastBibaList;
+  final UserCubitStatus? status;
   UserCubitState({
     this.userName,
     this.avatarBackgroundColor,
@@ -18,11 +21,13 @@ class UserCubitState {
     this.friendsDataList,
     this.futureBibaList,
     this.pastBibaList,
+    this.status,
   });
 }
 
 class UserCubit extends Cubit<UserCubitState> {
-  UserCubit({this.cloudRepository, this.uid}) : super(UserCubitState()) {
+  UserCubit({this.cloudRepository, this.uid})
+    : super(UserCubitState(status: UserCubitStatus.dataLoading)) {
     getUserData(uid);
     getUserFutureBibas();
     getUserPastBibas();
@@ -64,6 +69,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsDataList: friendsDataList,
           futureBibaList: state.futureBibaList,
           pastBibaList: state.pastBibaList,
+          status: UserCubitStatus.dataLoading,
         ),
       );
     } catch (e) {
@@ -74,6 +80,7 @@ class UserCubit extends Cubit<UserCubitState> {
           avatarBackgroundColor: Colors.grey,
           friendsList: [],
           friendsDataList: [],
+          status: UserCubitStatus.dataLoaded,
         ),
       );
     }
@@ -91,6 +98,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsDataList: state.friendsDataList,
           futureBibaList: state.futureBibaList,
           pastBibaList: state.pastBibaList,
+          status: UserCubitStatus.dataLoaded,
         ),
       );
     } catch (e) {
@@ -110,6 +118,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsDataList: state.friendsDataList,
           futureBibaList: state.futureBibaList,
           pastBibaList: state.pastBibaList,
+          status: UserCubitStatus.dataLoaded,
         ),
       );
     } catch (e) {
@@ -129,6 +138,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsDataList: state.friendsDataList,
           futureBibaList: state.futureBibaList,
           pastBibaList: state.pastBibaList,
+          status: UserCubitStatus.dataLoaded,
         ),
       );
     } catch (e) {
@@ -154,6 +164,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsDataList: state.friendsDataList,
           futureBibaList: state.futureBibaList,
           pastBibaList: state.pastBibaList,
+          status: UserCubitStatus.dataLoaded,
         ),
       );
     } catch (e) {
@@ -183,6 +194,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsDataList: state.friendsDataList,
           futureBibaList: futureBibas,
           pastBibaList: state.pastBibaList,
+          status: UserCubitStatus.dataLoaded,
         ),
       );
     } catch (e) {
@@ -202,6 +214,7 @@ class UserCubit extends Cubit<UserCubitState> {
         friendsDataList: state.friendsDataList,
         futureBibaList: futureBibas,
         pastBibaList: state.pastBibaList,
+        status: UserCubitStatus.dataLoaded,
       ),
     );
   }
@@ -218,6 +231,7 @@ class UserCubit extends Cubit<UserCubitState> {
         friendsDataList: state.friendsDataList,
         futureBibaList: state.futureBibaList,
         pastBibaList: pastBibas,
+        status: UserCubitStatus.dataLoaded,
       ),
     );
   }
