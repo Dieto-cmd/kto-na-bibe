@@ -17,6 +17,7 @@ abstract class CloudRepository {
   Future<List<BibaData>> getUserPastBibas({String? uid});
   Future<BibaData> getBibaData({String? bibaId});
   Future<void> addFriendToBiba({String? bibaID, String? friendUid});
+  Future<void> deleteGuestFromBiba({String? bibaID, String? guestUid});
 }
 
 class CloudFirestore extends CloudRepository {
@@ -227,7 +228,7 @@ class CloudFirestore extends CloudRepository {
         name: doc.get('name'),
         hostId: doc.get('hostUid'),
         hostName: hostName,
-        hostBackgroundColor: hostBackgroundColor ,
+        hostBackgroundColor: hostBackgroundColor,
         bibaId: doc.id,
         guestsIds: friendUidList,
         guestNames: friendNameList,
@@ -245,6 +246,17 @@ class CloudFirestore extends CloudRepository {
     try {
       await db.collection("Bibas").doc(bibaID).update({
         'guestUids': FieldValue.arrayUnion([friendUid]),
+      });
+    } catch (e) {
+      print("Printing exception thrown in addFriendToBiba: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<void> deleteGuestFromBiba({String? bibaID, String? guestUid}) async {
+    try {
+      await db.collection("Bibas").doc(bibaID).update({
+        'guestUids': FieldValue.arrayRemove([guestUid]),
       });
     } catch (e) {
       print("Printing exception thrown in addFriendToBiba: ${e.toString()}");

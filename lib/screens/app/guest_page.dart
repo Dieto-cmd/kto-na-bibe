@@ -62,24 +62,68 @@ class _GuestPageState extends State<GuestPage> {
 
                   return Padding(
                     padding: const EdgeInsets.only(top: 10),
-                    child: Card(
-                      color: Colors.deepPurple,
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: bibaState
-                              .data
-                              ?.guestsBackgroundColors?[guestIndex],
-                          child: Icon(Icons.person, color: Colors.white),
-                        ),
-                        title: Text(
-                          bibaState.data?.guestNames?[guestIndex] ?? "Unknown",
-                          style: regularTextStyle,
-                        ),
-                        subtitle: Text(
-                          "Guest",
-                          style: regularTextStyle.copyWith(
-                            fontSize: 12,
-                            color: Colors.white70,
+                    child: GestureDetector(
+                      onTap: () {
+                        final bibaCubit = bibaContext.read<BibaCubit>();
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) {
+                            return AlertDialog(
+                              backgroundColor: Colors.black,
+                              title: Text(
+                                "Delete ${bibaState.data?.guestNames?[guestIndex]} from biba?",
+                                style: regularTextStyle,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(
+                                    "Cancel",
+                                    style: regularTextStyle,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    bibaCubit.deleteGuest(
+                                      guestUid:
+                                          bibaState.data?.guestsIds?[guestIndex],
+                                    );
+                                    Navigator.pop(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
+                                  child: Text(
+                                    "Delete",
+                                    style: regularTextStyle,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Card(
+                        color: Colors.deepPurple,
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: bibaState
+                                .data
+                                ?.guestsBackgroundColors?[guestIndex],
+                            child: Icon(Icons.person, color: Colors.white),
+                          ),
+                          title: Text(
+                            bibaState.data?.guestNames?[guestIndex] ??
+                                "Unknown",
+                            style: regularTextStyle,
+                          ),
+                          subtitle: Text(
+                            "Guest",
+                            style: regularTextStyle.copyWith(
+                              fontSize: 12,
+                              color: Colors.white70,
+                            ),
                           ),
                         ),
                       ),

@@ -30,4 +30,10 @@ class BibaCubit extends Cubit<BibaCubitState> {
     getBibaData();
     emit(BibaCubitState(data: state.data ,status: BibaCubitStatus.dataLoaded));
   }
+
+  Future<void> deleteGuest({String? guestUid}) async {
+    await cloudRepository?.deleteGuestFromBiba(bibaID: bibaId, guestUid: guestUid);
+    getBibaData();
+    emit(BibaCubitState(data: state.data ,status: BibaCubitStatus.dataLoaded));
+  }
 }

@@ -47,11 +47,11 @@ class BibaHistoryPage extends StatelessWidget {
                 child: ListTile(
                   leading: Image.asset(
                     "assets/icons/Biba_B_logo.png",
-                    height: 44,
+                    height: 75,
                   ),
                   title: Text(
                     state.pastBibaList?[index].name ?? "Error",
-                    style: regularTextStyle,
+                    style: regularTextStyle.copyWith(fontSize: 18),
                   ),
                   subtitle: Text(
                     "Date: 21/02/2025, \n"
@@ -60,7 +60,7 @@ class BibaHistoryPage extends StatelessWidget {
                     "Guests: ${state.pastBibaList?[index].guestsIds?.length}",
                     style: hintTextStyle.copyWith(
                       color: Colors.grey,
-                      fontSize: 10,
+                      fontSize: 12,
                     ),
                   ),
                 ),

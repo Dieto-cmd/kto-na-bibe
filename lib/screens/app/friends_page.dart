@@ -68,7 +68,7 @@ class FriendsPage extends StatelessWidget {
                       },
                       child: Card(
                         elevation: 0,
-                        color: Colors.amber,
+                        color: Colors.deepPurple,
                         child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: ListTile(

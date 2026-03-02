@@ -54,16 +54,16 @@ class FutureBibasPage extends StatelessWidget {
                       ),
                       title: Text(
                         (state.futureBibaList?[index].name ?? "Error"),
-                        style: regularTextStyle,
+                        style: regularTextStyle.copyWith(fontSize: 18),
                       ),
                       subtitle: Text(
-                        "Date: 21/02/2026,"
-                        " Host: ${state.futureBibaList?[index].hostName},"
-                        " Place: ${state.futureBibaList?[index].place}"
-                        " Guests: ${state.futureBibaList?[index].guestsIds?.length ?? 0}",
+                        "Date: 21/02/2026,\n"
+                        "Host: ${state.futureBibaList?[index].hostName},\n"
+                        "Place: ${state.futureBibaList?[index].place}\n"
+                        "Guests: ${state.futureBibaList?[index].guestsIds?.length ?? 0}",
                         style: hintTextStyle.copyWith(
                           color: Colors.grey,
-                          fontSize: 10,
+                          fontSize: 12,
                         ),
                       ),
                     ),

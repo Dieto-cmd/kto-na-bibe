@@ -36,7 +36,7 @@ class _FriendSelectorState extends State<FriendSelector> {
                 },
                 child: Card(
                   elevation: isSelected ? 4 : 0,
-                  color: isSelected ? Colors.amber[700] : Colors.amber,
+                  color: isSelected ? Colors.amber[700] : Colors.deepPurple,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                     side: BorderSide(
