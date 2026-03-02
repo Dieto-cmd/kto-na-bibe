@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kto_na_bibe/constants.dart';
 import 'package:kto_na_bibe/cubits/user_cubit.dart';
 
+//To be implemented in the future
+
 class ItemPage extends StatelessWidget {
   ItemPage({super.key});
 
