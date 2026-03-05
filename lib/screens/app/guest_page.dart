@@ -7,8 +7,9 @@ import 'package:kto_na_bibe/screens/app/friend_selector.dart';
 import 'package:kto_na_bibe/screens/loading_page.dart';
 
 class GuestPage extends StatefulWidget {
-  const GuestPage({super.key, this.isHost});
+  const GuestPage({super.key, this.isHost, this.isNotPastBiba});
   final bool? isHost;
+  final bool? isNotPastBiba;
 
   @override
   State<GuestPage> createState() => _GuestPageState();
@@ -140,7 +141,9 @@ class _GuestPageState extends State<GuestPage> {
                         );
                       },
                     ),
-                    floatingActionButton: (widget.isHost ?? false)
+                    floatingActionButton:
+                        ((widget.isHost ?? false) &&
+                            (widget.isNotPastBiba ?? false))
                         ? FloatingActionButton(
                             onPressed: () {
                               final userCubit = context.read<UserCubit>();

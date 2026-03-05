@@ -12,7 +12,12 @@ abstract class CloudRepository {
   Future<BibaUserData?> getUserData(String? uid);
   Future<void> addFriend({String? uid, String? friendsUid});
   Future<void> deleteFriend({String? uid, String? friendsUid});
-  Future<void> createBiba({String? name, String? hostUid, String? place});
+  Future<void> createBiba({
+    String? name,
+    String? hostUid,
+    String? place,
+    DateTime? date,
+  });
   Future<List<BibaData>> getUserFutureBibas({String? uid});
   Future<List<BibaData>> getUserPastBibas({String? uid});
   Future<BibaData> getBibaData({String? bibaId});
@@ -122,6 +127,7 @@ class CloudFirestore extends CloudRepository {
     String? name,
     String? hostUid,
     String? place,
+    DateTime? date,
   }) async {
     try {
       await db.collection("Bibas").doc().set({
@@ -129,6 +135,7 @@ class CloudFirestore extends CloudRepository {
         'hostUid': hostUid,
         'place': place,
         'guestUids': [],
+        'date': Timestamp.fromDate(date ?? DateTime(0)),
       });
     } catch (e) {
       print(e.toString());
@@ -142,9 +149,12 @@ class CloudFirestore extends CloudRepository {
     final snapshot = await db
         .collection("Bibas")
         .where(
-          Filter.or(
-            Filter('hostUid', isEqualTo: uid),
-            Filter('guestUids', arrayContains: uid),
+          Filter.and(
+            Filter.or(
+              Filter('hostUid', isEqualTo: uid),
+              Filter('guestUids', arrayContains: uid),
+            ),
+            Filter('date', isGreaterThan: Timestamp.now()),
           ),
         )
         .get();
@@ -164,6 +174,7 @@ class CloudFirestore extends CloudRepository {
           name: biba["name"],
           place: biba["place"],
           bibaId: doc.id,
+          bibaDate: (biba["date"] as Timestamp).toDate(),
         ),
       );
     }
@@ -176,9 +187,12 @@ class CloudFirestore extends CloudRepository {
     final snapshot = await db
         .collection("Bibas")
         .where(
-          Filter.or(
-            Filter('hostUid', isEqualTo: uid),
-            Filter('guestUids', arrayContains: uid),
+          Filter.and(
+            Filter.or(
+              Filter('hostUid', isEqualTo: uid),
+              Filter('guestUids', arrayContains: uid),
+            ),
+            Filter('date', isLessThanOrEqualTo: Timestamp.now()),
           ),
         )
         .get();
@@ -234,6 +248,7 @@ class CloudFirestore extends CloudRepository {
         guestNames: friendNameList,
         guestsBackgroundColors: friendBackgroundColorList,
         place: doc.get('place'),
+        bibaDate: (doc.get('date') as Timestamp).toDate(),
       );
     } catch (e) {
       print("Printing exception thrown in getBibaData: ${e.toString()}");

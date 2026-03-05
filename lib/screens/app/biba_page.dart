@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kto_na_bibe/constants.dart';
 import 'package:kto_na_bibe/cubits/biba_cubit.dart';
 import 'package:kto_na_bibe/cubits/user_cubit.dart';
+import 'package:kto_na_bibe/screens/app/biba_info_page.dart';
 import 'package:kto_na_bibe/screens/app/guest_page.dart';
-import 'package:kto_na_bibe/screens/app/item_page.dart';
+import 'package:kto_na_bibe/screens/loading_page.dart';
 
 class BibaPage extends StatelessWidget {
-  const BibaPage({super.key});
+  const BibaPage({super.key, this.isNotPastBiba});
+  final bool? isNotPastBiba;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,7 @@ class BibaPage extends StatelessWidget {
             //rather than a cubit state, but the situation where uid needs to be
             //read from UserCubit is very rare
             bool isHost =
-                state.data?.hostId == userContext.read<UserCubit>().uid; 
+                state.data?.hostId == userContext.read<UserCubit>().uid;
             return DefaultTabController(
               length: 2,
               child: Scaffold(
@@ -43,11 +45,16 @@ class BibaPage extends StatelessWidget {
                     labelStyle: regularTextStyle.copyWith(fontSize: 16),
                     tabs: [
                       Tab(text: "Guests"),
-                      Tab(text: "Items"),
+                      Tab(text: "Info"),
                     ],
                   ),
                 ),
-                body: TabBarView(children: [GuestPage(isHost: isHost,), ItemPage()]),
+                body: TabBarView(
+                  children: [
+                    GuestPage(isHost: isHost, isNotPastBiba: isNotPastBiba),
+                    BibaInfoPage(),
+                  ],
+                ),
               ),
             );
           },

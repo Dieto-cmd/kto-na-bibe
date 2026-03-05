@@ -10,6 +10,7 @@ class BibaData {
   String? name;
   String? place;
   String? bibaId;
+  DateTime? bibaDate;
 
   BibaData({
     this.guestsIds,
@@ -21,5 +22,6 @@ class BibaData {
     this.bibaId,
     this.guestsBackgroundColors,
     this.hostBackgroundColor,
+    this.bibaDate
   });
 }

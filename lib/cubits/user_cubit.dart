@@ -69,7 +69,7 @@ class UserCubit extends Cubit<UserCubitState> {
           friendsDataList: friendsDataList,
           futureBibaList: state.futureBibaList,
           pastBibaList: state.pastBibaList,
-          status: UserCubitStatus.dataLoading,
+          status: UserCubitStatus.dataLoaded,
         ),
       );
     } catch (e) {
@@ -176,12 +176,14 @@ class UserCubit extends Cubit<UserCubitState> {
     String? name,
     String? place,
     String? hostUid,
+    DateTime? date,
   }) async {
     try {
       await cloudRepository?.createBiba(
         name: name,
         place: place,
         hostUid: hostUid,
+        date: date,
       );
       List<BibaData>? futureBibas = await cloudRepository?.getUserFutureBibas(
         uid: uid,
@@ -214,7 +216,7 @@ class UserCubit extends Cubit<UserCubitState> {
         friendsDataList: state.friendsDataList,
         futureBibaList: futureBibas,
         pastBibaList: state.pastBibaList,
-        status: UserCubitStatus.dataLoaded,
+        status: UserCubitStatus.dataLoading,
       ),
     );
   }
