@@ -28,7 +28,7 @@ class UserCubitState {
 class UserCubit extends Cubit<UserCubitState> {
   UserCubit({this.cloudRepository, this.uid})
     : super(UserCubitState(status: UserCubitStatus.dataLoading)) {
-    getUserData(uid);
+    getUserData();
     getUserFutureBibas();
     getUserPastBibas();
   }
@@ -45,7 +45,7 @@ class UserCubit extends Cubit<UserCubitState> {
     }
   }
 
-  Future<void> getUserData(String? uid) async {
+  Future<void> getUserData() async {
     try {
       BibaUserData? data = await cloudRepository?.getUserData(uid);
       List<String>? friendsList = data?.friendsList;

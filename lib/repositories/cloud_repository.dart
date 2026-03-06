@@ -23,6 +23,7 @@ abstract class CloudRepository {
   Future<BibaData> getBibaData({String? bibaId});
   Future<void> addFriendToBiba({String? bibaID, String? friendUid});
   Future<void> deleteGuestFromBiba({String? bibaID, String? guestUid});
+  Future<void> deleteBiba({String? bibaId});
 }
 
 class CloudFirestore extends CloudRepository {
@@ -276,6 +277,15 @@ class CloudFirestore extends CloudRepository {
       });
     } catch (e) {
       print("Printing exception thrown in addFriendToBiba: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<void> deleteBiba({String? bibaId}) async {
+    try {
+      await db.collection("Bibas").doc(bibaId).delete();
+    } catch (e) {
+      print(e.toString());
     }
   }
 

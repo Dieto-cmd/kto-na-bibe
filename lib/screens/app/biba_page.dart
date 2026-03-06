@@ -39,7 +39,48 @@ class BibaPage extends StatelessWidget {
                   actions: ((isNotPastBiba ?? false) && isHost == true)
                       ? [
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              final bibaCubit = context.read<BibaCubit>();
+                              final userCubit = userContext.read<UserCubit>();
+                              showDialog(
+                                context: context,
+                                builder: (dialogContext) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.black,
+                                    title: Text(
+                                      "Do you want to delete this Biba?",
+                                      style: regularTextStyle,
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: Text(
+                                          "Cancel",
+                                          style: regularTextStyle,
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.red,
+                                        ),
+                                        onPressed: () {
+                                          bibaCubit.deleteBiba();
+                                          userCubit.getUserFutureBibas();
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(
+                                          "Delete",
+                                          style: regularTextStyle,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
                             child: Icon(Icons.more_vert, color: Colors.white),
                           ),
                           SizedBox(width: 10),

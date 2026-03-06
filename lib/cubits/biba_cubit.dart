@@ -28,12 +28,20 @@ class BibaCubit extends Cubit<BibaCubitState> {
   Future<void> addFriendToBiba({String? uid}) async {
     await cloudRepository?.addFriendToBiba(bibaID: bibaId, friendUid: uid);
     getBibaData();
-    emit(BibaCubitState(data: state.data ,status: BibaCubitStatus.dataLoaded));
+    emit(BibaCubitState(data: state.data, status: BibaCubitStatus.dataLoaded));
   }
 
   Future<void> deleteGuest({String? guestUid}) async {
-    await cloudRepository?.deleteGuestFromBiba(bibaID: bibaId, guestUid: guestUid);
+    await cloudRepository?.deleteGuestFromBiba(
+      bibaID: bibaId,
+      guestUid: guestUid,
+    );
     getBibaData();
-    emit(BibaCubitState(data: state.data ,status: BibaCubitStatus.dataLoaded));
+    emit(BibaCubitState(data: state.data, status: BibaCubitStatus.dataLoaded));
+  }
+
+  Future<void> deleteBiba() async {
+    await cloudRepository?.deleteBiba(bibaId: bibaId);
+    emit(BibaCubitState(data: data, status: BibaCubitStatus.dataLoaded));
   }
 }
