@@ -231,7 +231,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             appBar: AppBar(
-              title: Text("Kto na bibe", style: regularTextStyle),
+              title: Text("Biba Party Planner", style: regularTextStyle),
               centerTitle: true,
               backgroundColor: Colors.pink[700],
               actions: [
