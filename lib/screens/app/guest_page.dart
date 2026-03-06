@@ -69,48 +69,52 @@ class _GuestPageState extends State<GuestPage> {
                         return Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: GestureDetector(
-                            onTap: () {
-                              final bibaCubit = bibaContext.read<BibaCubit>();
-                              showDialog(
-                                context: context,
-                                builder: (dialogContext) {
-                                  return AlertDialog(
-                                    backgroundColor: Colors.black,
-                                    title: Text(
-                                      "Delete ${bibaState.data?.guestNames?[guestIndex]} from biba?",
-                                      style: regularTextStyle,
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text(
-                                          "Cancel",
-                                          style: regularTextStyle,
-                                        ),
-                                      ),
-                                      SizedBox(height: 10),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          bibaCubit.deleteGuest(
-                                            guestUid: bibaState
-                                                .data
-                                                ?.guestsIds?[guestIndex],
-                                          );
-                                          Navigator.pop(context);
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.red,
-                                        ),
-                                        child: Text(
-                                          "Delete",
-                                          style: regularTextStyle,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
+                            onTap: (widget.isHost ?? false)
+                                ? () {
+                                    final bibaCubit = bibaContext
+                                        .read<BibaCubit>();
+                                    showDialog(
+                                      context: context,
+                                      builder: (dialogContext) {
+                                        return AlertDialog(
+                                          backgroundColor: Colors.black,
+                                          title: Text(
+                                            "Delete ${bibaState.data?.guestNames?[guestIndex]} from biba?",
+                                            style: regularTextStyle,
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: Text(
+                                                "Cancel",
+                                                style: regularTextStyle,
+                                              ),
+                                            ),
+                                            SizedBox(height: 10),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                bibaCubit.deleteGuest(
+                                                  guestUid: bibaState
+                                                      .data
+                                                      ?.guestsIds?[guestIndex],
+                                                );
+                                                Navigator.pop(context);
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.red,
+                                              ),
+                                              child: Text(
+                                                "Delete",
+                                                style: regularTextStyle,
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                : null,
                             child: Card(
                               color: Colors.deepPurple,
                               child: ListTile(

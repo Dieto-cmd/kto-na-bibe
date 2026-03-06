@@ -62,7 +62,7 @@ class BibaHistoryPage extends StatelessWidget {
                             style: regularTextStyle.copyWith(fontSize: 18),
                           ),
                           subtitle: Text(
-                            "${DateFormat("dd.MM.yyyy, HH:mm").format(state.futureBibaList?[index].bibaDate ?? DateTime(0))}\n"
+                            "${DateFormat("dd.MM.yyyy, HH:mm").format(state.pastBibaList?[index].bibaDate ?? DateTime(0))}\n"
                             "Host: ${state.pastBibaList?[index].hostName},\n"
                             "Place: ${state.pastBibaList?[index].place},\n"
                             "Guests: ${state.pastBibaList?[index].guestsIds?.length}",

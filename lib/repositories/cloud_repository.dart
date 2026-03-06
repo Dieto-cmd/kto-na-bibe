@@ -212,6 +212,7 @@ class CloudFirestore extends CloudRepository {
           name: biba["name"],
           place: biba["place"],
           bibaId: doc.id,
+          bibaDate: (biba["date"] as Timestamp).toDate(),
         ),
       );
     }

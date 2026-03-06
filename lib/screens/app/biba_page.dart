@@ -5,7 +5,6 @@ import 'package:kto_na_bibe/cubits/biba_cubit.dart';
 import 'package:kto_na_bibe/cubits/user_cubit.dart';
 import 'package:kto_na_bibe/screens/app/biba_info_page.dart';
 import 'package:kto_na_bibe/screens/app/guest_page.dart';
-import 'package:kto_na_bibe/screens/loading_page.dart';
 
 class BibaPage extends StatelessWidget {
   const BibaPage({super.key, this.isNotPastBiba});
@@ -37,6 +36,15 @@ class BibaPage extends StatelessWidget {
                     onTap: () => Navigator.of(context).pop(),
                     child: Icon(Icons.arrow_back, color: Colors.white),
                   ),
+                  actions: ((isNotPastBiba ?? false) && isHost == true)
+                      ? [
+                          GestureDetector(
+                            onTap: () {},
+                            child: Icon(Icons.more_vert, color: Colors.white),
+                          ),
+                          SizedBox(width: 10),
+                        ]
+                      : null,
                   bottom: TabBar(
                     indicatorSize: TabBarIndicatorSize.tab,
                     indicatorColor: Colors.amber,
